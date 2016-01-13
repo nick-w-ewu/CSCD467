@@ -15,7 +15,7 @@ public class MessageRunner implements Runnable
 		int i;
 		for(i = 0; i < 50; i++)
 		{
-			System.out.println("Message from thread---->" + Thread.currentThread().getName());
+			System.out.printf("Message i = %d, from Thread Printer\n", i+1);
 			waiter.interrupt();
 			try
 			{

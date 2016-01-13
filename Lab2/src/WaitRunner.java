@@ -11,7 +11,7 @@ public class WaitRunner implements Runnable
 	public void run()
 	{
 		int interuptedCount = 0;
-		while(interuptedCount < 50)
+		while(interuptedCount <= 25)
 		{
 			try
 			{

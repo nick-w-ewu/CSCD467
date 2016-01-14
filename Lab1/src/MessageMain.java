@@ -1,3 +1,7 @@
+//Nicholas Witmer
+//CSCD 467 Lab1
+//Window Listener Code provided by Tony
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -18,5 +22,4 @@ public class MessageMain
 					}
 				});
 	}
-
 }

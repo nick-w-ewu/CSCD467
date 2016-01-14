@@ -1,4 +1,6 @@
-
+//Nicholas Witmer
+//CSCD 467 Lab1
+//Basic GUI Code, in constructor, provided by Tony
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -10,10 +12,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
 
-
 public class Inputter extends JFrame implements KeyListener
 {
-
 	private static final long serialVersionUID = 1L;
 
 	private JTextArea output;
@@ -77,6 +77,4 @@ public class Inputter extends JFrame implements KeyListener
 		}
 		keyboardCount++;
 	}
-
-	
 }

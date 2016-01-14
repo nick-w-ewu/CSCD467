@@ -1,3 +1,6 @@
+//Nicholas Witmer
+//CSCD 467 Lab1
+
 import javax.swing.JTextArea;
 
 public class MessageRunner implements Runnable
@@ -26,7 +29,5 @@ public class MessageRunner implements Runnable
 				return;
 			}
 		}
-	}
-	
-	
+	}	
 }

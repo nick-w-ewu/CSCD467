@@ -1,4 +1,5 @@
-
+//Nicholas Witmer
+//CSCD 467 Lab2
 
 public class MessageMain
 {

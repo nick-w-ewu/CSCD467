@@ -1,3 +1,6 @@
+//Nicholas Witmer
+//CSCD 467 Lab2
+
 import javax.swing.JTextArea;
 
 public class MessageRunner implements Runnable

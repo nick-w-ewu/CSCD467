@@ -52,6 +52,14 @@ public class Inputter extends JFrame implements KeyListener
 		if(this.display)
 		{
 			this.thread1.interrupt();
+			try
+			{
+				thread1.join();
+			}
+			catch (InterruptedException e1)
+			{
+				
+			}
 			this.message = "";
 			this.display = false;
 		}
@@ -63,7 +71,6 @@ public class Inputter extends JFrame implements KeyListener
 		int keyCode = e.getKeyCode();
 		if (keyCode == KeyEvent.VK_ENTER)
 		{
-			System.out.println(message);
 			if(message.compareToIgnoreCase("exit") == 0)
 			{
 				this.thread1.interrupt();

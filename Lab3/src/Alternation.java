@@ -1,38 +1,34 @@
 public class Alternation
 {
 
-    boolean isT1turn;
-    final Object lock = new Object();
+    final ConditionalLock lock = new ConditionalLock();
     Thread t1;
     Thread t2;
 
     public Alternation()
     {
 
-        isT1turn = true;
         t1 = new Thread(new Runnable()
         {
             @Override
             public void run()
             {
-                for (int i = 1; i <= 50; i += 2)
+                while(lock.getMessageNum() < 50)
                 {
-                    synchronized (lock)
+                    while (!lock.isTurn())
                     {
-                        while (!isT1turn)
-                        {
-                            ;  //guarded block
-                        }
-                        System.out.println("T1=" + i);
-                        isT1turn = false;
-                        try
-                        {
-                            Thread.sleep(1000);
-                        }
-                        catch (InterruptedException e)
-                        {
-                        }
-                    }//end of sync
+                        ;  //guarded block
+                    }
+                    System.out.printf("Message %d from Thread T1\n", lock.getMessageNum());
+                    lock.incrementMessageNum();
+                    lock.setTurn(false);
+                    try
+                    {
+                        Thread.sleep(1000);
+                    }
+                    catch (InterruptedException e)
+                    {
+                    }
                 }//end of for
             }
         });
@@ -42,24 +38,22 @@ public class Alternation
             @Override
             public void run()
             {
-                for (int i = 2; i <= 50; i += 2)
+                while(lock.getMessageNum() < 50)
                 {
-                    synchronized (lock)
+                    while (lock.isTurn())
                     {
-                        while (isT1turn)
-                        {
-                            ;   //guarded block
-                        }
-                        try
-                        {
-                            Thread.sleep(1000);
-                        }
-                        catch (InterruptedException e)
-                        {
-                        }
-                        System.out.println("T2=" + i);
-                        isT1turn = true;
-                    }//end of sync
+                        ;   //guarded block
+                    }
+                    try
+                    {
+                        Thread.sleep(1000);
+                    }
+                    catch (InterruptedException e)
+                    {
+                    }
+                    System.out.printf("Message %d from Thread T2\n", lock.getMessageNum());
+                    lock.incrementMessageNum();
+                    lock.setTurn(true);
                 }
             }
         });

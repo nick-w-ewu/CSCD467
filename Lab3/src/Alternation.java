@@ -1,59 +1,59 @@
 public class Alternation
 {
 
-    final ConditionalLock lock = new ConditionalLock();
+    final ConditionalLock monitor = new ConditionalLock();
     Thread t1;
     Thread t2;
 
     public Alternation()
     {
-
         t1 = new Thread(new Runnable()
         {
             @Override
             public void run()
             {
-                while(lock.getMessageNum() < 50)
+                while(monitor.getMessageNum() < 50)
                 {
-                    while (!lock.isTurn())
+                    while (!monitor.isTurn())
                     {
-                        ;  //guarded block
+                          //guarded block
                     }
-                    System.out.printf("Message %d from Thread T1\n", lock.getMessageNum());
-                    lock.incrementMessageNum();
-                    lock.setTurn(false);
+
                     try
                     {
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                     }
                     catch (InterruptedException e)
                     {
                     }
+                    System.out.printf("Message %d from Thread T1\n", monitor.getMessageNum());
+                    monitor.incrementMessageNum();
+                    monitor.setTurn(false);
                 }//end of for
             }
         });
+
         t2 = new Thread(new Runnable()
         {
-
             @Override
             public void run()
             {
-                while(lock.getMessageNum() < 50)
+                while(monitor.getMessageNum() < 50)
                 {
-                    while (lock.isTurn())
+                    while (monitor.isTurn())
                     {
-                        ;   //guarded block
+                           //guarded block
                     }
                     try
                     {
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                     }
                     catch (InterruptedException e)
                     {
                     }
-                    System.out.printf("Message %d from Thread T2\n", lock.getMessageNum());
-                    lock.incrementMessageNum();
-                    lock.setTurn(true);
+                    System.out.printf("Message %d from Thread T2\n", monitor.getMessageNum());
+                    monitor.incrementMessageNum();
+                    monitor.setTurn(true);
                 }
             }
         });

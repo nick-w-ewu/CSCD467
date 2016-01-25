@@ -18,7 +18,7 @@ public class ThreadPrime extends Thread
         // write me here
         for(int i = low; i <= high; i++)
         {
-            if(isPrime(i))
+            if(SerialPrime.isPrime(i))
             {
                 numFound++;
             }
@@ -26,19 +26,19 @@ public class ThreadPrime extends Thread
         this.c.increment(numFound);
     }
 
-    public boolean isPrime(int n)
-    {
-        //check if n is a multiple of 2
-        if (n % 2 == 0) return false;
-        //if not, then just check the odds
-        for (int i = 3; i * i <= n; i += 2)
-        {
-            if (n % i == 0)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
+//    public boolean isPrime(int n)
+//    {
+//        //check if n is a multiple of 2
+//        if (n % 2 == 0) return false;
+//        //if not, then just check the odds
+//        for (int i = 3; i * i <= n; i += 2)
+//        {
+//            if (n % i == 0)
+//            {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
 }

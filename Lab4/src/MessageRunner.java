@@ -1,5 +1,5 @@
 /**
- * Created by nicho_000 on 1/25/2016.
+ * Created by Nicholas Witmer on 1/25/2016 for CSCD467 at EWU.
  */
 public class MessageRunner implements Runnable
 {
@@ -16,7 +16,6 @@ public class MessageRunner implements Runnable
     {
         for(int i = 0; i < 10; i++)
         {
-
            if(monitor.isTurn(threadNumber))
            {
                System.out.printf("%s Message from thread %d.\n", monitor.getMessageNum(), threadNumber);

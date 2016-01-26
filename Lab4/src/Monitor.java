@@ -1,5 +1,5 @@
 /**
- * Created by nicho_000 on 1/25/2016.
+ * Created by Nicholas Witmer on 1/25/2016 for CSCD467 at EWU.
  */
 public class Monitor
 {

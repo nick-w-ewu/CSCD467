@@ -1,17 +1,15 @@
-public class MyPrimeTest {
+public class MyPrimeTest
+{
     public static void main(String[] args) throws InterruptedException
     {
-/*        if (args.length < 3)
+        if (args.length < 3)
         {
             System.out.println("Usage: MyPrimeTest numThread low high \n");
             return;
-        }*/
-/*        int nthreads = Integer.parseInt(args[0]);
+        }
+        int nthreads = Integer.parseInt(args[0]);
         int low = Integer.parseInt(args[1]);
-        int high = Integer.parseInt(args[2]);*/
-        int nthreads = 10;
-        int low = 1;
-        int high = 10000000;
+        int high = Integer.parseInt(args[2]);
         Counter c = new Counter();
         ThreadPrime[] threads;
 

@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -16,7 +17,7 @@ import java.net.Socket;
  *  * interpreter, Ctrl+C generally will shut it down.
  *  
  */
-public class CapitalizeServer
+public class CommandServer
 {
 
     /**
@@ -35,6 +36,8 @@ public class CapitalizeServer
         ServerSocket listener = new ServerSocket(9898);
         Socket socket;
         SharedQueue monitor = new SharedQueue();
+        ThreadPool pool = new ThreadPool(monitor);
+        pool.startPool();
         String command;
         BufferedReader in;
         PrintWriter out;
@@ -46,16 +49,32 @@ public class CapitalizeServer
                 in = new BufferedReader(
                         new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream(), true);
+//                out.println("Welcome to the Calculation Server");
+//                out.println("You can use the ADD, MUL, SUB, or DIV commands to process data");
+//                out.println("You may stop the server by issuing the KILL command");
                 command = in.readLine();
                 if(command.equalsIgnoreCase("kill"))
                 {
-                    break;
+                    monitor.setShutdown();
+                    System.out.println("Killing server");
+                    pool.shutdownThreads();
+                    throw new IOException();
                 }
                 else
                 {
-                    monitor.enqueueJob(new Job(socket, command));
+                    if(!monitor.enqueueJob(new Job(socket, command)))
+                    {
+                        out.println("Server is full, please try again later");
+                        out.close();
+                        in.close();
+                        socket.close();
+                    }
                 }
             }
+        }
+        catch(IOException e)
+        {
+
         }
         finally
         {

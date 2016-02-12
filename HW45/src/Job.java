@@ -52,7 +52,6 @@ public class Job
 
     public void jobCompleated()
     {
-        this.out.close();
         try
         {
             this.client.close();

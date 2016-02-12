@@ -15,27 +15,21 @@ public class SharedQueue
         this.jobs = new Job[MAX_SIZE];
     }
 
-    public synchronized void enqueueJob(Job job)
+    public synchronized boolean enqueueJob(Job job)
     {
-        while(!writeable)
+        if(writeable)
         {
-            try
+            jobs[tail] = job;
+            readable = true;
+            tail = (tail + 1) % MAX_SIZE;
+            if (head == tail)
             {
-                wait();
+                writeable = false;
             }
-            catch(InterruptedException e)
-            {
-
-            }
+            notify();
+            return true;
         }
-        jobs[tail] = job;
-        readable = true;
-        tail = (tail +1) % MAX_SIZE;
-        if(head == tail)
-        {
-            writeable = false;
-        }
-        notify();
+        return false;
     }
 
     public synchronized Job dequeueJob()
@@ -49,7 +43,10 @@ public class SharedQueue
             }
             catch(InterruptedException e)
             {
-
+                if(this.shutdownCommand)
+                {
+                    return null;
+                }
             }
         }
         writeable = true;

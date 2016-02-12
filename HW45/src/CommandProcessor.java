@@ -1,13 +1,20 @@
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by nicho on 2/10/2016.
  */
-public class CommandProcessor implements Runnable
+public class CommandProcessor extends Thread
 {
     private SharedQueue monitor;
+    private int threadNum;
 
-    public CommandProcessor(SharedQueue monitor)
+    public CommandProcessor(SharedQueue monitor, int num)
     {
         this.monitor = monitor;
+        this.threadNum = num;
     }
 
     @Override
@@ -21,53 +28,76 @@ public class CommandProcessor implements Runnable
         {
             job = monitor.dequeueJob();
 
-            if(job ==  null)
+            if (job == null)
             {
                 break;
             }
             commandParts = job.getAction().split(",");
-            int1 = Integer.parseInt(commandParts[1]);
-            int2 = Integer.parseInt(commandParts[2]);
-            switch (commandParts[0])
+            if (commandParts.length == 3)
             {
-                case ("ADD"):
+                int1 = Integer.parseInt(commandParts[1]);
+                int2 = Integer.parseInt(commandParts[2]);
+                switch (commandParts[0])
                 {
-                    result = int1+int2;
-                    job.printToClient(result+"");
-                    break;
+                    case ("ADD"):
+                    {
+                        result = int1 + int2;
+                        job.printToClient(result + "");
+                        log(commandParts[0], result);
+                        break;
+                    }
+                    case ("SUB"):
+                    {
+                        result = int1 - int2;
+                        job.printToClient(result + "");
+                        log(commandParts[0], result);
+                        break;
+                    }
+                    case ("MUL"):
+                    {
+                        result = int1 * int2;
+                        job.printToClient(result + "");
+                        log(commandParts[0], result);
+                        break;
+                    }
+                    case ("DIV"):
+                    {
+                        result = int1 / int2;
+                        job.printToClient(result + "");
+                        log(commandParts[0], result);
+                        break;
+                    }
+                    default:
+                    {
+                        job.printToClient("Invalid Command");
+                        log(commandParts[0], 0);
+                    }
                 }
-                case ("SUB"):
+                job.jobCompleated();
+                try
                 {
-                    result = int1-int2;
-                    job.printToClient(result+"");
-                    break;
+                    Thread.sleep(100);
                 }
-                case ("MUL"):
+                catch (InterruptedException e)
                 {
-                    result = int1*int2;
-                    job.printToClient(result+"");
                     break;
-                }
-                case ("DIV"):
-                {
-                    result = int1/int2;
-                    job.printToClient(result+"");
-                    break;
-                }
-                default:
-                {
-                    job.printToClient("Invalid Command");
                 }
             }
-            job.jobCompleated();
-            try
+            else
             {
-                Thread.sleep(100);
-            }
-            catch(InterruptedException e)
-            {
-                break;
+                job.printToClient("Invalid Command");
+                log(commandParts[0], 0);
             }
         }
     }
+
+    private void log(String command, int result)
+    {
+        Thread parent = Thread.currentThread();
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        System.out.println("Command " + command + " was processed with result " + result + " by CommandProcessor " + this.threadNum
+                            + " at " + dateFormat.format(date));
+    }
+
 }

@@ -8,7 +8,7 @@ public class SharedQueue
     private boolean shutdownCommand = false;
     private boolean writeable = true;
     private boolean readable = false;
-    private int head = 0, tail = 0;
+    private int head = 0, tail = 0, currentSize = 0;
 
     public SharedQueue()
     {
@@ -27,6 +27,7 @@ public class SharedQueue
                 writeable = false;
             }
             notify();
+            currentSize++;
             return true;
         }
         return false;
@@ -34,6 +35,7 @@ public class SharedQueue
 
     public synchronized Job dequeueJob()
     {
+        CommandProcessor me = (CommandProcessor)Thread.currentThread();
         Job temp;
         while(!readable)
         {
@@ -43,14 +45,16 @@ public class SharedQueue
             }
             catch(InterruptedException e)
             {
-                if(this.shutdownCommand)
+                if(this.shutdownCommand || me.getKilledByManager())
                 {
                     return null;
                 }
             }
+
         }
         writeable = true;
         temp = jobs[head];
+        currentSize--;
         head = (head +1) % MAX_SIZE;
         if(head == tail)
         {
@@ -64,8 +68,18 @@ public class SharedQueue
         return temp;
     }
 
+    public synchronized int getCurrentSize()
+    {
+        return this.currentSize;
+    }
+
     public synchronized void setShutdown()
     {
         this.shutdownCommand = true;
+    }
+
+    public synchronized boolean getShutdown()
+    {
+        return this.shutdownCommand;
     }
 }

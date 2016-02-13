@@ -61,4 +61,9 @@ public class Job
 
         }
     }
+
+    public String toString()
+    {
+        return this.action;
+    }
 }

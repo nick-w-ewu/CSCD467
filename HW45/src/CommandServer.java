@@ -32,12 +32,14 @@ public class CommandServer
     public static void main(String[] args) throws Exception
     {
         System.out.println("The capitalization server is running.");
-        int clientNumber = 0;
-        ServerSocket listener = new ServerSocket(9898);
+        int i = 0;
+        ServerSocket listener = new ServerSocket(9899);
         Socket socket;
         SharedQueue monitor = new SharedQueue();
         ThreadPool pool = new ThreadPool(monitor);
         pool.startPool();
+        ThreadManager manager = new ThreadManager(pool, monitor);
+        manager.start();
         String command;
         BufferedReader in;
         PrintWriter out;
@@ -70,6 +72,15 @@ public class CommandServer
                         socket.close();
                     }
                 }
+                if(i ==0)
+                {
+                    pool.increaseThreadsInPool();
+                }
+                if(i == 1)
+                {
+                    pool.decreaseThreadsInPool();
+                }
+                i++;
             }
         }
         catch(IOException e)

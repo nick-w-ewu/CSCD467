@@ -10,6 +10,7 @@ public class CommandProcessor extends Thread
 {
     private SharedQueue monitor;
     private int threadNum;
+    private boolean killedByManager = false;
 
     public CommandProcessor(SharedQueue monitor, int num)
     {
@@ -30,6 +31,7 @@ public class CommandProcessor extends Thread
 
             if (job == null)
             {
+                System.out.println("Shutting down processor " + this.threadNum);
                 break;
             }
             commandParts = job.getAction().split(",");
@@ -100,4 +102,18 @@ public class CommandProcessor extends Thread
                             + " at " + dateFormat.format(date));
     }
 
+    public int getThreadNum()
+    {
+        return threadNum;
+    }
+
+    public synchronized boolean getKilledByManager()
+    {
+        return this.killedByManager;
+    }
+
+    public synchronized void setKilledByManager()
+    {
+        this.killedByManager = true;
+    }
 }

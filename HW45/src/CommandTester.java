@@ -10,7 +10,7 @@ public class CommandTester
     {
         try
         {
-            CommandClient tester = new CommandClient("localhost", 9898);
+            CommandClient tester = new CommandClient("localhost", 9899);
             Scanner input = new Scanner(System.in);
             String command = "test";
 
